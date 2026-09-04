@@ -2,20 +2,24 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowUpRight,
+  ChevronDown,
   CircuitBoard,
   Code2,
   Cpu,
-  ExternalLink,
+  Github,
+  Globe,
   Grid3X3,
   Mail,
   MousePointer2,
   PenTool,
   Sparkles,
+  Terminal,
   X,
   Zap
 } from "lucide-react";
 import "./styles.css";
 import studioCollage from "./assets/studio-collage.png";
+import { getExperiments, getPlayground, getProjects } from "./lib/store.js";
 
 const navItems = [
   ["01", "Work"],
@@ -25,77 +29,99 @@ const navItems = [
   ["05", "Contact"]
 ];
 
-const projects = [
+// Static fallback shown before any admin data is set
+const DEFAULT_PROJECTS = [
   {
-    id: "004",
-    title: "Event Management Platform",
-    meta: "Product / UX / Development",
+    repoName: "portfolio",
+    title: "This Portfolio",
+    description: "Experimental engineering, software, UI/UX, branding, and creative technology portfolio.",
+    githubUrl: "https://github.com/Rdx011O",
+    liveUrl: "",
+    language: "React",
+    selected: true,
     tone: "lime",
-    span: "feature",
-    copy: "A role-aware event workflow with dashboards, registrations, approvals, and calm operational screens for teams under pressure."
-  },
-  {
-    id: "001",
-    title: "Circuit Health Console",
-    meta: "ECE / Embedded / Data UI",
-    tone: "blue",
-    span: "tall",
-    copy: "Sensor readings become scan-friendly states, alerts, and tiny diagnostic stories."
-  },
-  {
-    id: "002",
-    title: "Brand System: Tech Fest",
-    meta: "Identity / Posters / Motion",
-    tone: "orange",
-    span: "wide",
-    copy: "A visual language for banners, stage screens, passes, social posts, and on-ground wayfinding."
-  },
-  {
-    id: "003",
-    title: "Prototype UI Lab",
-    meta: "React / Interaction / Creative Code",
-    tone: "lime",
-    span: "small",
-    copy: "Micro tools, interface sketches, odd controls, and polished experiments that started as curiosity."
-  },
-  {
-    id: "005",
-    title: "Hardware Notes Archive",
-    meta: "Documentation / Engineering",
-    tone: "neutral",
-    span: "small",
-    copy: "A visual archive of builds, diagrams, test notes, and practical learnings from real experiments."
+    order: 0,
+    stages: [
+      { label: "Problem", content: "" },
+      { label: "Thinking", content: "" },
+      { label: "Design", content: "" },
+      { label: "Build", content: "" },
+      { label: "Result", content: "" },
+    ]
   }
 ];
 
-const skillGroups = [
+// Span assignment based on position index
+const SPANS = ["feature", "tall", "wide", "small", "small"];
+
+function useProjects() {
+  const [projects] = useState(() => {
+    const saved = getProjects().filter((p) => p.selected);
+    return saved.length ? saved : DEFAULT_PROJECTS;
+  });
+  return projects;
+}
+
+function useExperiments() {
+  const [cards] = useState(getExperiments);
+  return cards;
+}
+
+// ── Skill data with detail text per skill ──────────────────────
+const SKILL_OS = [
   {
-    title: "Build",
+    drive: "BUILD",
     icon: Code2,
-    items: ["HTML", "CSS", "JavaScript", "React", "Python", "Java"]
+    color: "lime",
+    prefix: "01",
+    skills: [
+      { name: "HTML", level: 90, note: "Semantic, accessible markup. Structure first, always." },
+      { name: "CSS", level: 88, note: "Grid, custom properties, animations, responsive layouts." },
+      { name: "JavaScript", level: 85, note: "ES2024+, async patterns, DOM mastery, clean code." },
+      { name: "React", level: 82, note: "Hooks, context, component design systems, SPA architecture." },
+      { name: "Python", level: 72, note: "Scripts, data processing, automation, ML experiments." },
+      { name: "Java", level: 60, note: "OOP, data structures, algorithmic problem solving." },
+    ],
   },
   {
-    title: "Engineer",
+    drive: "ENGINEER",
     icon: Cpu,
-    items: ["Electronics", "Embedded Systems", "Hardware", "Problem Solving", "Signals"]
+    color: "blue",
+    prefix: "02",
+    skills: [
+      { name: "Electronics", level: 80, note: "Circuits, components, schematics, PCB basics." },
+      { name: "Embedded Systems", level: 75, note: "Microcontrollers, sensors, real-time logic." },
+      { name: "Hardware Design", level: 70, note: "Prototyping, breadboard builds, signal analysis." },
+      { name: "Problem Solving", level: 92, note: "Breaking complex systems into solvable parts." },
+      { name: "Signal Processing", level: 65, note: "ADC/DAC, filters, oscilloscope analysis." },
+    ],
   },
   {
-    title: "Design",
+    drive: "DESIGN",
     icon: PenTool,
-    items: ["UI / UX", "Visual Design", "Branding", "Event Design", "Systems"]
+    color: "orange",
+    prefix: "03",
+    skills: [
+      { name: "UI / UX", level: 85, note: "User flows, wireframes, usability, accessibility." },
+      { name: "Visual Design", level: 80, note: "Typography, color systems, layout, hierarchy." },
+      { name: "Branding", level: 75, note: "Identity systems, logo design, brand guidelines." },
+      { name: "Event Design", level: 78, note: "Stage screens, posters, wayfinding, motion." },
+      { name: "Systems Thinking", level: 88, note: "Designing components that scale and connect." },
+    ],
   },
   {
-    title: "Explore",
+    drive: "EXPLORE",
     icon: Sparkles,
-    items: ["AI", "Creative Tech", "Prototyping", "Interaction", "Typography"]
-  }
-];
-
-const experiments = [
-  ["TYPE-01", "Kinetic poster grid", "Typography that reacts like a machine warming up."],
-  ["LAB-18", "Micro dashboard", "Tiny operational screens for large messy systems."],
-  ["AI-06", "Prompted interface moodboard", "Visual studies for impossible products."],
-  ["HW-12", "Sensor signal sketch", "Turning invisible readings into visible rhythm."]
+    color: "neutral",
+    prefix: "04",
+    skills: [
+      { name: "AI / ML", level: 60, note: "Prompt engineering, model APIs, generative tools." },
+      { name: "Creative Tech", level: 82, note: "Intersection of code, design, and physical media." },
+      { name: "Prototyping", level: 87, note: "Idea to working demo, fast iteration, low friction." },
+      { name: "Interaction Design", level: 78, note: "Micro-animations, haptics, feedback loops." },
+      { name: "Typography", level: 72, note: "Type as texture, scale, rhythm, and personality." },
+    ],
+  },
 ];
 
 function useContentProtection() {
@@ -359,26 +385,113 @@ function About() {
   );
 }
 
-function ProjectVisual({ tone }) {
+// ── Language-aware project visual ──────────────────────────
+const LANG_TONE = {
+  JavaScript: "lime", TypeScript: "lime", React: "lime", Vue: "lime",
+  HTML: "lime", CSS: "lime", "Jupyter Notebook": "blue",
+  Python: "blue", C: "orange", "C++": "orange", "C#": "orange",
+  Java: "orange", Arduino: "orange", Rust: "blue",
+};
+
+function toneFromLanguage(lang) {
+  return LANG_TONE[lang] || "neutral";
+}
+
+function ProjectVisual({ tone, language }) {
+  const effectiveTone = tone || toneFromLanguage(language);
   return (
-    <div className={`project-visual ${tone}`}>
+    <div className={`project-visual ${effectiveTone}`}>
       <div className="browser-dots">
-        <span />
-        <span />
-        <span />
+        <span /><span /><span />
       </div>
+      {/* Circuit trace layer — always shown */}
+      <div className="visual-circuit">
+        <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" className="circuit-svg">
+          <path d="M10 60 L50 60 L50 30 L120 30" className="circuit-path" />
+          <path d="M50 60 L50 90 L100 90" className="circuit-path" />
+          <path d="M120 30 L150 30 L150 60 L190 60" className="circuit-path" />
+          <path d="M100 90 L130 90 L130 60 L150 60" className="circuit-path" />
+          <circle cx="50" cy="60" r="3" className="circuit-node" />
+          <circle cx="120" cy="30" r="3" className="circuit-node" />
+          <circle cx="100" cy="90" r="3" className="circuit-node" />
+          <circle cx="150" cy="60" r="3" className="circuit-node" />
+          <rect x="115" y="24" width="18" height="12" rx="2" className="circuit-chip" />
+          <rect x="145" y="54" width="18" height="12" rx="2" className="circuit-chip" />
+        </svg>
+      </div>
+      {/* Animated blocks */}
       <div className="visual-grid">
         <span className="block a" />
         <span className="block b" />
         <span className="block c" />
         <span className="lines" />
+        {/* Language badge */}
+        {language && (
+          <span className="visual-lang-badge">{language}</span>
+        )}
       </div>
     </div>
   );
 }
 
+// ── Expandable 5-stage accordion per project ─────────────────
+function StageAccordion({ project }) {
+  const [open, setOpen] = useState(false);
+  const hasContent = project.stages?.some((s) => s.content?.trim());
+
+  return (
+    <div className="stage-accordion">
+      <button
+        className="stage-accordion-trigger"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        data-cursor="OPEN"
+      >
+        <span className="stage-repo-label">
+          <Github size={12} />
+          {project.repoName}
+        </span>
+        <span className="stage-trigger-label">How I Built This</span>
+        <ChevronDown
+          size={15}
+          className="stage-chevron"
+          style={{ rotate: open ? "180deg" : "0deg" }}
+        />
+      </button>
+
+      {open && (
+        <div className="stage-panel">
+          {hasContent ? (
+            <div className="stage-strip">
+              {project.stages.map((stage, i) => (
+                <div key={stage.label} className="stage-frame">
+                  <span className="stage-num">{String(i + 1).padStart(2, "0")}</span>
+                  <h4>{stage.label}</h4>
+                  <p>{stage.content || <em className="stage-empty">Not filled in yet.</em>}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="stage-empty-msg">
+              No breakdown written yet —{" "}
+              <a href="/admin" target="_blank" rel="noreferrer">add it in the Admin panel</a>.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Work() {
-  const [active, setActive] = useState(projects[0]);
+  const projects = useProjects();
+  const [active, setActive] = useState(null);
+
+  useEffect(() => {
+    if (projects.length) setActive(projects[0]);
+  }, [projects]);
+
+  if (!projects.length) return null;
 
   return (
     <section className="work section-frame" id="work">
@@ -387,108 +500,185 @@ function Work() {
         <h2>PROJECTS AS SYSTEMS, NOT JUST THUMBNAILS.</h2>
       </div>
       <div className="project-grid">
-        {projects.map((project) => (
+        {projects.map((project, i) => (
           <article
-            className={`project-card ${project.span} tone-${project.tone}`}
-            key={project.id}
+            className={`project-card ${SPANS[i % SPANS.length]} tone-${project.tone}`}
+            key={project.repoName}
             onMouseEnter={() => setActive(project)}
             data-cursor="VIEW"
           >
             <div className="project-topline">
-              <span>PROJECT / {project.id}</span>
-              <ExternalLink size={17} />
+              <span>PROJECT / {String(i + 1).padStart(2, "0")}</span>
+              <div className="project-topline-links">
+                {project.liveUrl && (
+                  <a href={project.liveUrl} target="_blank" rel="noreferrer" data-cursor="OPEN"
+                    onClick={(e) => e.stopPropagation()} title="Live demo">
+                    <Globe size={15} />
+                  </a>
+                )}
+                {project.githubUrl && (
+                  <a href={project.githubUrl} target="_blank" rel="noreferrer" data-cursor="OPEN"
+                    onClick={(e) => e.stopPropagation()} title="View on GitHub">
+                    <Github size={15} />
+                  </a>
+                )}
+              </div>
             </div>
-            <ProjectVisual tone={project.tone} />
+            <ProjectVisual tone={project.tone} language={project.language} />
             <div>
               <h3>{project.title}</h3>
-              <p className="meta">{project.meta}</p>
-              <p>{project.copy}</p>
+              {project.language && <p className="meta">{project.language}</p>}
+              <p>{project.description}</p>
             </div>
+            <StageAccordion project={project} />
           </article>
         ))}
       </div>
-      <aside className="hover-preview" aria-live="polite">
-        <span>HOVER PREVIEW</span>
-        <strong>{active.title}</strong>
-        <p>{active.meta}</p>
-      </aside>
+      {active && (
+        <aside className="hover-preview" aria-live="polite">
+          <span>HOVER PREVIEW</span>
+          <strong>{active.title}</strong>
+          <p>{active.language || active.description?.slice(0, 60)}</p>
+        </aside>
+      )}
     </section>
   );
 }
 
-function CaseStudyFrames() {
-  const frames = ["Problem", "Thinking", "Design", "Build", "Result"];
+// CaseStudyFrames is now removed — stage breakdowns live inside each project card
 
-  return (
-    <section className="case-study section-frame">
-      <div className="section-label">PROJECT 004 / Case Study Frames</div>
-      <h2>EVENT MANAGEMENT PLATFORM</h2>
-      <div className="frame-strip">
-        {frames.map((frame, index) => (
-          <article key={frame} data-cursor="OPEN">
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <h3>{frame}</h3>
-            <p>
-              {frame === "Problem"
-                ? "Messy coordination, scattered approvals, unclear ownership."
-                : frame === "Thinking"
-                  ? "Map the event as states, roles, deadlines, and decisions."
-                  : frame === "Design"
-                    ? "Create screens that can be scanned fast during pressure."
-                    : frame === "Build"
-                      ? "Prototype the dashboard, registration flow, and admin controls."
-                      : "A calmer workflow that makes complexity visible and actionable."}
-            </p>
-          </article>
-        ))}
-      </div>
-    </section>
-  );
-}
-
+// ── Skills OS ──────────────────────────────────────────────
+// A terminal-style OS skill browser
 function Skills() {
-  const [selected, setSelected] = useState("React");
+  const [activeDrive, setActiveDrive] = useState(0);
+  const [activeSkill, setActiveSkill] = useState(SKILL_OS[0].skills[0]);
+  const [typed, setTyped] = useState("");
+  const inputRef = useRef();
+
+  const drive = SKILL_OS[activeDrive];
+
+  // Simulated terminal command
+  const handleCmd = (e) => {
+    if (e.key === "Enter" && typed.trim()) {
+      // Find skill by name
+      const all = SKILL_OS.flatMap((d) => d.skills);
+      const match = all.find((s) => s.name.toLowerCase().includes(typed.toLowerCase()));
+      if (match) setActiveSkill(match);
+      setTyped("");
+    }
+  };
 
   return (
     <section className="skills section-frame" id="skills">
       <div className="section-head">
         <div className="section-label">04 / Skills</div>
-        <h2>SKILL ECOSYSTEM</h2>
+        <h2>SKILL OPERATING SYSTEM</h2>
       </div>
-      <div className="skill-grid">
-        {skillGroups.map(({ title, icon: Icon, items }) => (
-          <article className="skill-family" key={title}>
-            <div className="skill-title">
-              <Icon size={23} />
-              <h3>{title}</h3>
+
+      <div className="skill-os">
+        {/* Drive selector — left sidebar */}
+        <div className="skill-drives">
+          <div className="skill-drives-label">DRIVES</div>
+          {SKILL_OS.map((d, i) => (
+            <button
+              key={d.drive}
+              className={`skill-drive-btn color-${d.color}${i === activeDrive ? " active" : ""}`}
+              onClick={() => { setActiveDrive(i); setActiveSkill(d.skills[0]); }}
+              data-cursor="SELECT"
+            >
+              <d.icon size={14} />
+              <span>{d.prefix}</span>
+              {d.drive}
+            </button>
+          ))}
+          <div className="skill-drives-footer">
+            <Terminal size={12} />
+            {SKILL_OS.reduce((a, d) => a + d.skills.length, 0)} skills indexed
+          </div>
+        </div>
+
+        {/* File list — centre */}
+        <div className="skill-files">
+          <div className="skill-files-header">
+            <span className="skill-drive-path">{drive.prefix}:\ {drive.drive}\</span>
+          </div>
+          <div className="skill-file-list">
+            {drive.skills.map((skill, i) => (
+              <button
+                key={skill.name}
+                className={`skill-file${activeSkill.name === skill.name ? " active" : ""}`}
+                onClick={() => setActiveSkill(skill)}
+                style={{ animationDelay: `${i * 40}ms` }}
+                data-cursor="OPEN"
+              >
+                <span className="skill-file-icon">{String(i + 1).padStart(2, "0")}</span>
+                <span className="skill-file-name">{skill.name}</span>
+                <div className="skill-mini-bar">
+                  <div className="skill-mini-fill" style={{ width: `${skill.level}%` }} />
+                </div>
+                <span className="skill-pct">{skill.level}%</span>
+              </button>
+            ))}
+          </div>
+          {/* Terminal input */}
+          <div className="skill-terminal">
+            <span className="skill-prompt">C:\SKILLS&gt; search</span>
+            <input
+              ref={inputRef}
+              className="skill-cmd"
+              value={typed}
+              onChange={(e) => setTyped(e.target.value)}
+              onKeyDown={handleCmd}
+              placeholder="type skill name + Enter"
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </div>
+        </div>
+
+        {/* Detail panel — right */}
+        <div className="skill-detail">
+          <div className="skill-detail-header">
+            <span>PROPERTIES</span>
+            <span className="skill-detail-file">{activeSkill.name}.skill</span>
+          </div>
+          <div className="skill-detail-body">
+            <div className="skill-ring-wrap">
+              <svg viewBox="0 0 120 120" className="skill-ring-svg">
+                <circle cx="60" cy="60" r="48" className="skill-ring-bg" />
+                <circle
+                  cx="60" cy="60" r="48"
+                  className={`skill-ring-fill color-${drive.color}`}
+                  style={{
+                    strokeDasharray: `${2 * Math.PI * 48}`,
+                    strokeDashoffset: `${2 * Math.PI * 48 * (1 - activeSkill.level / 100)}`,
+                  }}
+                />
+                <text x="60" y="56" className="skill-ring-pct">{activeSkill.level}</text>
+                <text x="60" y="72" className="skill-ring-label">/ 100</text>
+              </svg>
             </div>
-            <div className="chips">
-              {items.map((item) => (
-                <button
-                  className={selected === item ? "chip active" : "chip"}
-                  key={item}
-                  onClick={() => setSelected(item)}
-                  data-cursor="SELECT"
-                >
-                  {item}
-                </button>
-              ))}
+            <h3 className="skill-detail-name">{activeSkill.name}</h3>
+            <p className="skill-detail-drive">Drive: {drive.drive}</p>
+            <p className="skill-detail-note">{activeSkill.note}</p>
+          </div>
+          <div className="skill-detail-footer">
+            <span>PROFICIENCY</span>
+            <div className="skill-bar-full">
+              <div className={`skill-bar-track color-${drive.color}`} style={{ width: `${activeSkill.level}%` }} />
             </div>
-          </article>
-        ))}
-      </div>
-      <div className="skill-note">
-        <span>SELECTED SKILL</span>
-        <strong>{selected}</strong>
-        <p>Used as a practical tool, a design material, or a way to make an idea testable.</p>
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
 function Experiments() {
+  const experiments = useExperiments();
   const [found, setFound] = useState(false);
-  const rotation = useMemo(() => experiments.map((_, index) => index * 5 - 7), []);
+  const [playgroundText] = useState(getPlayground);
+  const rotation = useMemo(() => experiments.map((_, i) => i * 6 - 9), [experiments]);
 
   return (
     <section className="experiments section-frame" id="experiments">
@@ -497,16 +687,16 @@ function Experiments() {
         <h2>PLAYGROUND FOR UNFINISHED SIGNALS.</h2>
       </div>
       <div className="experiment-board">
-        {experiments.map(([code, title, copy], index) => (
+        {experiments.map((exp, index) => (
           <article
             className="experiment-note"
-            key={code}
+            key={exp.id}
             style={{ rotate: `${rotation[index]}deg` }}
             data-cursor="DRAG"
           >
-            <span>{code}</span>
-            <h3>{title}</h3>
-            <p>{copy}</p>
+            <span>{exp.id}</span>
+            <h3>{exp.title}</h3>
+            <p>{exp.copy}</p>
           </article>
         ))}
         <button
@@ -518,6 +708,18 @@ function Experiments() {
           <Zap size={22} />
         </button>
         {found && <p className="found-message">YOU FOUND SOMETHING.</p>}
+      </div>
+
+      {/* Playground note — editable from /admin */}
+      <div className="playground-note" data-cursor="INSPECT">
+        <span className="playground-label">
+          <Sparkles size={12} />
+          CURRENTLY EXPLORING
+        </span>
+        <p>{playgroundText}</p>
+        <a href="/admin" target="_blank" rel="noreferrer" className="playground-edit" data-cursor="OPEN">
+          Edit in Admin →
+        </a>
       </div>
     </section>
   );
@@ -557,7 +759,6 @@ function App() {
       <main>
         <Hero />
         <Work />
-        <CaseStudyFrames />
         <About />
         <Experiments />
         <Skills />
