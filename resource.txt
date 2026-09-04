@@ -1,0 +1,431 @@
+1. Detailed Portfolio UI / Visual Theme Prompt
+
+Design a personal portfolio website for a technically minded, visually experimental engineering student who sits at the intersection of electronics, software, UI/UX, event design, branding, and creative technology.
+
+The portfolio should not feel like a generic “developer portfolio.” It should communicate the personality of someone who builds things, experiments with ideas, cares deeply about visual presentation, and enjoys turning technical concepts into polished experiences.
+
+The visual direction should take strong inspiration from the supplied references: bold neon-lime accents, deep charcoal/black surfaces, vivid orange-red highlights, oversized typography, rounded geometric containers, pixel/retro-futuristic graphics, minimal iconography, barcode-like patterns, browser/UI motifs, and intentionally playful micro-interactions.
+
+Core visual personality
+
+The design language should feel:
+
+Modern
+Experimental
+Technical
+Minimal but expressive
+Confident rather than corporate
+Creative without becoming chaotic
+Futuristic with subtle retro/digital influences
+Highly intentional in spacing, typography, and motion
+
+The site should look like it belongs to someone who could simultaneously work on an engineering project, design an event identity, prototype a web application, create a poster, and build a technical solution.
+
+Avoid the typical portfolio formula of a huge photograph + “Hi, I'm X” + floating gradient blobs. Instead, make the interface itself part of the personality.
+
+Color system
+
+Use a mostly dark foundation:
+
+Near-black / charcoal: primary background
+Off-white: primary typography
+Neon lime: signature accent and interactive state
+Electric orange / red-orange: secondary accent
+Muted grey: supporting text and UI elements
+Occasional electric blue for technical/data-oriented details
+
+The neon lime should become the recognizable visual signature of the portfolio. It can appear as:
+
+Hover states
+Buttons
+Cursor interactions
+Small labels
+Progress indicators
+Graphic elements
+Borders
+Project tags
+Selected navigation states
+
+Orange should be used more selectively to create contrast.
+
+Do not make every section brightly colored. The strongest visual impact should come from large areas of restraint followed by deliberate bursts of color.
+
+Typography
+
+Use a contemporary sans-serif type system with an almost Apple/SF-inspired clarity, but combine it with a more distinctive display treatment for major headings.
+
+Typography should be highly hierarchical:
+
+Display headings:
+Large, bold, slightly condensed or geometric sans-serif.
+
+Body:
+Clean, highly legible modern sans-serif.
+
+Technical labels:
+Monospaced or terminal-inspired typography.
+
+For example, project metadata could look like:
+
+PROJECT / 004
+ECE × SOFTWARE × DESIGN
+2026
+
+Large headings should occasionally occupy most of the viewport.
+
+Use typography as a graphic element rather than simply as information.
+
+Navigation
+
+Create an extremely simple navigation system.
+
+Possible structure:
+
+01 — Work
+02 — About
+03 — Experiments
+04 — Skills
+05 — Contact
+
+The navigation could remain subtly fixed while scrolling.
+
+Instead of a conventional hamburger menu, consider a compact pill-shaped navigation/control, consistent with the supplied references.
+
+Micro-interactions should make navigation feel tactile:
+
+Text shifts slightly on hover.
+Icons animate.
+Lime highlights expand.
+Navigation labels subtly invert.
+Cursor interactions reveal additional information.
+Homepage
+
+The homepage should immediately communicate:
+
+This isn't just a portfolio. It's a collection of things I build, design, experiment with, and obsess over.
+
+Hero composition
+
+Use a large asymmetrical hero.
+
+Possible headline:
+
+I BUILD
+THINGS THAT
+MAKE SENSE.
+
+or:
+
+ENGINEERING ×
+DESIGN ×
+EXPERIMENTATION
+
+A smaller introduction underneath could explain that the portfolio owner works across electronics, software, product interfaces, visual design, and creative technology.
+
+Rather than using a conventional hero photograph, place a large abstract interactive graphic beside or behind the typography.
+
+The graphic could combine:
+
+Browser-window geometry
+Pixel shapes
+Barcode lines
+Technical diagrams
+Cursor arrows
+Small UI components
+Lime/orange geometric blocks
+Floating project numbers
+
+This makes the homepage feel like an evolving digital workspace.
+
+About Me
+
+Make the About section feel more personal than a conventional biography.
+
+Instead of a wall of text, divide it into modular cards.
+
+Example structure
+
+WHO I AM
+
+Engineering student.
+Builder.
+Designer.
+Problem solver.
+Constantly experimenting.
+
+Then show small statements such as:
+
+I LIKE MAKING COMPLEX THINGS SIMPLE.
+
+I CARE ABOUT HOW THINGS WORK — AND HOW THEY FEEL.
+
+I DON'T LIKE LEAVING IDEAS AS IDEAS.
+
+Include a portrait only if desired, but treat it editorially rather than as a standard professional headshot.
+
+The image could appear inside a large rounded frame with an intentionally unconventional crop.
+
+Work / Project Gallery
+
+This should be the main attraction.
+
+Projects should not appear as ordinary cards in a uniform 3-column grid.
+
+Use an editorial, asymmetric gallery with different card sizes.
+
+For example:
+
+FEATURED PROJECT
+
+Large 2/3-width project panel.
+
+EVENT MANAGEMENT PLATFORM
+Product / UX / Development
+
+Large visual preview.
+
+Then smaller projects:
+
+01 — WEB APPLICATION
+02 — ECE PROJECT
+03 — BRANDING SYSTEM
+04 — EVENT DESIGN
+05 — UI EXPERIMENT
+06 — CREATIVE CODE
+
+The supplied visual references suggest that project presentation should be almost as important as the project itself.
+
+Each project can have its own visual identity while still belonging to the same portfolio system.
+
+Project Detail Pages
+
+When opening a project, create a dramatic case-study experience.
+
+Structure:
+
+PROJECT 004
+
+Event Management
+
+Platform
+
+Problem → Thinking → Design → Build → Result
+
+Then use large screenshots, diagrams, UI fragments, photographs, and short explanations.
+
+Show the process rather than merely claiming the result.
+
+Include sections such as:
+
+Problem
+Concept
+Research
+Architecture
+Interface
+Development
+Challenges
+Outcome
+What I learned
+
+Use oversized numbers:
+
+01
+02
+03
+
+as visual anchors.
+
+Skills
+
+Avoid a boring percentage-based skill chart.
+
+Instead create a skill ecosystem.
+
+Example:
+
+BUILD
+
+HTML / CSS / JavaScript
+Python
+Java
+Web Applications
+
+ENGINEER
+
+Electronics
+Embedded Systems
+Hardware
+Problem Solving
+
+DESIGN
+
+UI / UX
+Visual Design
+Branding
+Event Design
+
+EXPLORE
+
+AI
+Creative Technology
+Prototyping
+Interaction Design
+
+Skills can appear as interactive chips that expand into small explanations or examples of projects where that skill was used.
+
+Experiments Section
+
+This could become one of the portfolio's most distinctive sections.
+
+Call it something like:
+
+LAB / PLAYGROUND / EXPERIMENTS
+
+Show unfinished or experimental work:
+
+UI concepts
+Visual experiments
+Small coding projects
+AI experiments
+Typography experiments
+Interaction ideas
+Poster/banner designs
+Hardware concepts
+Random prototypes
+
+The idea is to communicate:
+
+I don't only work when someone gives me a brief. I experiment because I'm curious.
+
+Use deliberately playful layouts here, including pixel graphics, oversized cursors, draggable elements, rotating objects, and unusual typography.
+
+Interactive Features
+
+The interaction design should be subtle but memorable.
+
+Cursor
+
+Create a custom cursor that changes depending on context.
+
+For example:
+
+VIEW →
+OPEN →
+DRAG →
+EXPLORE →
+
+Hover previews
+
+Hovering over a project could reveal a small floating preview rather than immediately navigating away.
+
+Magnetic buttons
+
+CTA buttons subtly move toward the cursor.
+
+Scroll animations
+
+Use restrained:
+
+Parallax
+Text reveals
+Image clipping
+Horizontal transitions
+Number counters
+Masked typography
+
+Avoid excessive animation that makes the site feel like a demo rather than a portfolio.
+
+Easter eggs
+
+Small hidden interactions could reinforce personality.
+
+For example:
+
+Clicking a tiny pixel icon could reveal:
+
+YOU FOUND SOMETHING.
+
+This kind of detail fits the experimental references extremely well.
+
+Contact Section
+
+Make the final section feel like an invitation rather than a conventional contact form.
+
+Large statement:
+
+HAVE AN IDEA?
+
+LET'S BUILD IT.
+
+Then provide:
+
+EMAIL
+LINKEDIN
+GITHUB
+INSTAGRAM / DESIGN WORK
+
+The email CTA could be a giant interactive button.
+
+On hover, the button could transform from:
+
+SEND A MESSAGE →
+
+to:
+
+LET'S MAKE SOMETHING →
+
+Overall Layout System
+
+Use a strong grid underneath the seemingly playful composition.
+
+Recommended principles:
+
+Generous negative space
+12-column desktop grid
+Large margins
+Asymmetric project placement
+Rounded rectangles
+Occasional full-width sections
+Editorial typography
+Strong visual rhythm
+Responsive mobile transformation rather than simply shrinking the desktop design
+
+Cards should have large corner radii, but not every element should be rounded. Mix:
+
+soft UI containers + sharp typography + pixel graphics
+
+to create contrast.
+
+Imagery Direction
+
+Photography should feel documentary/editorial rather than stock.
+
+Use:
+
+Engineering work
+Prototypes
+Screens
+Electronics
+Event environments
+Posters
+Physical objects
+Work-in-progress images
+Close-up technical details
+
+Images can occasionally be treated with:
+
+High contrast
+Monochrome
+Lime overlays
+Orange framing
+Cropping
+Grain
+Pixelation
+
+But don't apply the same filter to everything.
+
+The portfolio should feel like a real person documenting what they make, not a template filled with stock imagery.
+
+Overall Atmosphere
+
+The final experience should feel like entering a designer-engineer's digital studio.
