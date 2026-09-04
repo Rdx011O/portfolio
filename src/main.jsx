@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowUpRight,
@@ -11,6 +11,7 @@ import {
   MousePointer2,
   PenTool,
   Sparkles,
+  X,
   Zap
 } from "lucide-react";
 import "./styles.css";
@@ -179,20 +180,101 @@ function Cursor() {
 }
 
 function Nav() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const drawerRef = useRef(null);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // Close drawer on outside click
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   return (
-    <header className="site-nav">
-      <a className="mark" href="#top" data-cursor="HOME">
-        <span>AK</span>
-      </a>
-      <nav aria-label="Primary navigation">
-        {navItems.map(([number, label]) => (
-          <a href={`#${label.toLowerCase()}`} key={label} data-cursor="JUMP">
-            <span>{number}</span>
-            {label}
-          </a>
-        ))}
-      </nav>
-    </header>
+    <>
+      <header className={`site-nav${scrolled ? " scrolled" : ""}`}>
+        {/* Logo mark */}
+        <a className="mark" href="#top" data-cursor="HOME" onClick={() => setOpen(false)}>
+          <span>AK</span>
+        </a>
+
+        {/* Desktop nav */}
+        <nav className="nav-desktop" aria-label="Primary navigation">
+          {navItems.map(([number, label]) => (
+            <a href={`#${label.toLowerCase()}`} key={label} data-cursor="JUMP">
+              <em>{number}</em>
+              <span>{label}</span>
+            </a>
+          ))}
+        </nav>
+
+        {/* Desktop CTA */}
+        <a className="nav-cta" href="#contact" data-cursor="SEND">
+          Let's Talk
+          <ArrowUpRight size={15} />
+        </a>
+
+        {/* Mobile hamburger */}
+        <button
+          className={`nav-burger${open ? " is-open" : ""}`}
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+        >
+          <span /><span /><span />
+        </button>
+      </header>
+
+      {/* Mobile drawer */}
+      <div
+        className={`nav-overlay${open ? " is-open" : ""}`}
+        onClick={() => setOpen(false)}
+        aria-hidden="true"
+      />
+      <aside
+        ref={drawerRef}
+        className={`nav-drawer${open ? " is-open" : ""}`}
+        aria-label="Mobile navigation"
+      >
+        <div className="drawer-head">
+          <span className="drawer-logo">AK</span>
+          <button className="drawer-close" onClick={() => setOpen(false)} aria-label="Close menu">
+            <X size={20} />
+          </button>
+        </div>
+        <nav className="drawer-nav">
+          {navItems.map(([number, label], i) => (
+            <a
+              href={`#${label.toLowerCase()}`}
+              key={label}
+              onClick={() => setOpen(false)}
+              style={{ animationDelay: `${i * 55}ms` }}
+            >
+              <em>{number}</em>
+              <strong>{label}</strong>
+              <ArrowUpRight size={18} className="drawer-arrow" />
+            </a>
+          ))}
+        </nav>
+        <div className="drawer-foot">
+          <span>STATUS</span>
+          <strong>ACTIVE / CURIOUS</strong>
+          <div className="drawer-meter"><i /></div>
+        </div>
+      </aside>
+    </>
   );
 }
 
