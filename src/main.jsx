@@ -97,6 +97,53 @@ const experiments = [
   ["HW-12", "Sensor signal sketch", "Turning invisible readings into visible rhythm."]
 ];
 
+function useContentProtection() {
+  useEffect(() => {
+    const block = (event) => event.preventDefault();
+    const blockCopyKeys = (event) => {
+      const key = event.key.toLowerCase();
+      const hasModifier = event.ctrlKey || event.metaKey;
+      const blockedKeys = ["c", "x", "a", "s", "p", "+", "-", "=", "0"];
+
+      if (hasModifier && blockedKeys.includes(key)) {
+        event.preventDefault();
+      }
+    };
+    const blockZoomWheel = (event) => {
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+      }
+    };
+
+    document.body.setAttribute("oncontextmenu", "return false");
+    document.body.setAttribute("onselectstart", "return false");
+    document.body.setAttribute("ondragstart", "return false");
+
+    document.addEventListener("copy", block);
+    document.addEventListener("cut", block);
+    document.addEventListener("paste", block);
+    document.addEventListener("contextmenu", block);
+    document.addEventListener("selectstart", block);
+    document.addEventListener("dragstart", block);
+    window.addEventListener("keydown", blockCopyKeys);
+    window.addEventListener("wheel", blockZoomWheel, { passive: false });
+
+    return () => {
+      document.body.removeAttribute("oncontextmenu");
+      document.body.removeAttribute("onselectstart");
+      document.body.removeAttribute("ondragstart");
+      document.removeEventListener("copy", block);
+      document.removeEventListener("cut", block);
+      document.removeEventListener("paste", block);
+      document.removeEventListener("contextmenu", block);
+      document.removeEventListener("selectstart", block);
+      document.removeEventListener("dragstart", block);
+      window.removeEventListener("keydown", blockCopyKeys);
+      window.removeEventListener("wheel", blockZoomWheel);
+    };
+  }, []);
+}
+
 function usePointerLabel() {
   const [pointer, setPointer] = useState({ x: -120, y: -120, label: "EXPLORE" });
 
@@ -419,6 +466,8 @@ function Contact() {
 }
 
 function App() {
+  useContentProtection();
+
   return (
     <>
       <Cursor />

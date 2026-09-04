@@ -20,10 +20,16 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-drag: none;
+  user-select: none;
 }
 
 html {
   scroll-behavior: smooth;
+  touch-action: pan-y;
 }
 
 body {
@@ -52,6 +58,7 @@ button {
 img {
   display: block;
   max-width: 100%;
+  pointer-events: none;
 }
 
 .cursor {
